@@ -1,0 +1,35 @@
+{
+  "name": "sb2media/basis",
+  "description": "Framework for crafting plugins to extend and customize WordPress with WPGraphQL support to use WordPress as a headless CMS",
+  "keywords": [
+    "wordpress",
+    "framework",
+    "wpgraphql",
+    "graphql",
+    "headless cms"
+  ],
+  "type": "wordpress-plugin",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Stephen Barry",
+      "email": "sbarry50@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "illuminate/config": "^5.8",
+    "illuminate/contracts": "^5.8",
+    "illuminate/support": "^5.8",
+    "pimple/pimple": "~3.0",
+    "downshiftorg/wp-event-emitter": "^6.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "6.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "SB2Media\\Basis\\": "src/"
+    }
+  }
+}

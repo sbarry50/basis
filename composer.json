@@ -30,6 +30,10 @@
   "autoload": {
     "psr-4": {
       "SB2Media\\Basis\\": "src/"
-    }
+    },
+    "classmap": [],
+    "files": [
+      "src/helpers.php"
+    ]
   }
 }

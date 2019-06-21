@@ -150,14 +150,9 @@ class Application extends Container
 
         foreach ($config_files as $config_id => $config_file) {
             $config = [];
-            $config_value = Loader::loadFile(path('config') . $config_file);
-            $config[$config_id] = $config_value;
-
-            if (array_key_exists('defaults', $config)) {
-                config($config, $config[$config_id]['defaults']);
-            } else {
-                config($config);
-            }
+            $config_values = Loader::loadFile(path('config') . $config_file);
+            $config[$config_id] = $config_values;
+            config($config);
         }
     }
 

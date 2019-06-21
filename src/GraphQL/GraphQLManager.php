@@ -85,9 +85,20 @@ abstract class GraphQLManager implements WordPressAPIContract
         $graphql_config = [];
 
         foreach ($config as $cfg) {
+            if ('image-upload' === $cfg['callback']) {
+                $cfg = app('images')->imageUploadFilter($cfg);
+                $cfg['graphql']['type'] = 'MediaDetails';
+                $cfg['graphql']['resolver'] = 'media-details-graphql';
+            }
+
+            if ('multi-select' === $cfg['callback'] || 'multi-checkbox' === $cfg['callback']) {
+                $cfg['graphql']['type'] = ['list_of' => 'String'];
+            }
+
             $graphql_config[] = [
                 'id'            => isset($cfg['id']) ? $cfg['id'] : '',
                 'description'   => isset($cfg['description']) ? $cfg['description'] : '',
+                'image'         => ('image-upload' === $cfg['callback']) ? true : false,
                 'type'          => isset($cfg['graphql']['type']) ? $cfg['graphql']['type'] : 'String',
                 'resolver'      => isset($cfg['graphql']['resolver']) ? $cfg['graphql']['resolver'] : '',
                 'default_value' => isset($cfg['graphql']['default_value']) ? $cfg['graphql']['default_value'] : null,
@@ -130,7 +141,7 @@ abstract class GraphQLManager implements WordPressAPIContract
      */
     protected function resolveField(array $config, $value)
     {
-        $type = ucfirst($config['type']);
+        $type = $config['type'];
 
         if (is_array($type) && isset($type['non_null'])) {
             $type = $type['non_null'];
@@ -157,7 +168,7 @@ abstract class GraphQLManager implements WordPressAPIContract
         if (is_array($type) && isset($type['list_of'])) {
             if (is_string($type['list_of']) && $this->isCoreScalar($type['list_of'])) {
                 if (is_null($config['default_value'])) {
-                    return (array) $value;
+                    return !empty($value) ? (array) $value : (array) [];
                 }
                 
                 return !empty($value) ? (array) $value : (array) $config['default_value'];

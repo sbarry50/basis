@@ -31,7 +31,7 @@ class ViewFinder
     public function render(string $filename, array $config = [], bool $field = false)
     {
         if ('image-upload' == $filename) {
-            $config = $this->imageUploadFilter($config);
+            $config = app('images')->imageUploadFilter($config);
         }
 
         $locations = ['plugin', 'framework'];
@@ -68,41 +68,5 @@ class ViewFinder
         $path .= $field ? 'fields/' : '';
         
         return $path . $filename . '.php';
-    }
-
-    /**
-     * Filter the arguments for an image upload
-     *
-     * @since 1.0.0
-     * @param array $args
-     * @return array
-     */
-    private function imageUploadFilter($args)
-    {
-        $width = array_key_exists('width', $args['args']) ? $args['args']['width'] : 150;
-        $height = array_key_exists('height', $args['args']) ? $args['args']['height'] : 150;
-        $id = $args['id'];
-        $wp_img_id = array_key_exists('page', $args) ? get_option($id) : get_post_meta(get_the_ID(), $id, true);
-        $default_image = url('resources/img', 'no-image.png');
-    
-        if (!empty($wp_img_id)) {
-            $image_attributes = wp_get_attachment_image_src($wp_img_id, array($width * 2, $height * 2));
-            $src = $image_attributes[0];
-            $value = $wp_img_id;
-        } else {
-            $src = $default_image;
-            $value = '';
-        }
-    
-        $args = [
-            'id'            => $id,
-            'src'           => $src,
-            'default_image' => $default_image,
-            'width'         => $width,
-            'height'        => $height,
-            'value'         => $value,
-        ];
-    
-        return $args;
     }
 }

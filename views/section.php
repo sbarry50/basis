@@ -1,1 +1,0 @@
-<p><?php echo $args['callback']; ?></p>

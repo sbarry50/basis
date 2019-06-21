@@ -35,7 +35,6 @@ class MetaFields extends GraphQLManager implements WordPressAPIContract
 
                 $meta_fields = $this->metaFieldsInPostType($post_type);
                 $meta_fields = $this->graphqlConfig($meta_fields);
-                d($meta_fields);
 
                 foreach ($meta_fields as $meta_field) {
                     $type = $this->resolveType($meta_field['type']);
